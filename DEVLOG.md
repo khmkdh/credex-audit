@@ -34,3 +34,33 @@ Access Token.
 features. Will support all 8 AI tools with plan selection, seat count, and
 monthly spend fields. Will implement localStorage persistence so form state
 survives page reloads.
+
+## Day 2 — 2026-05-24
+
+**Hours worked:** 8
+
+**What I did:** Built the complete application end-to-end. Created the spend
+input form with all 8 AI tools, localStorage persistence, and plan/seat
+selection. Built the audit engine with defensible pricing rules for all tools.
+Built the audit results page with per-tool breakdown, savings hero numbers,
+severity badges, and lead capture form. Integrated Google Gemini API for
+AI-generated summaries with graceful fallback. Built shareable audit URLs
+with unique slugs stored in Supabase. Set up API routes for leads and audits.
+Wrote 7 passing Jest tests for the audit engine. Deployed to Vercel at
+https://credex-audit-wges.vercel.app. Wrote README, ARCHITECTURE, GTM,
+ECONOMICS, METRICS, LANDING_COPY, PROMPTS, and REFLECTION docs.
+
+**What I learned:** React hooks (useState, useEffect) and how they replace
+vanilla JS event listeners. Next.js App Router file-based routing — creating
+a folder with page.tsx automatically creates a route. How dynamic routes work
+with [slug] folders. That Next.js 15 changed params to be a Promise, breaking
+the build on Vercel until I fixed the type. How to set up Jest with ts-jest
+for TypeScript projects. The difference between client and server components
+in Next.js.
+
+**Blockers / what I'm stuck on:** Resend email integration not yet complete —
+the lead form stores emails in Supabase but does not send a confirmation email.
+USER_INTERVIEWS.md pending — need to conduct 3 real interviews.
+
+**Plan for tomorrow:** Complete user interviews, finish Resend email
+integration, run Lighthouse audit on deployed URL, write USER_INTERVIEWS.md.
