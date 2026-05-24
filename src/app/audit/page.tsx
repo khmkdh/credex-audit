@@ -31,7 +31,7 @@ export default function AuditPage() {
   const [summary, setSummary] = useState<string>("");
   const [shareUrl, setShareUrl] = useState<string>("");
 
-useEffect(() => {
+  useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) {
       router.push("/");
@@ -60,11 +60,25 @@ useEffect(() => {
       fetch("/api/summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ auditResult }),
+        body: JSON.stringify({
+          auditResult: {
+            totalMonthlySpend: auditResult.totalMonthlySpend,
+            totalMonthlySavings: auditResult.totalMonthlySavings,
+            totalAnnualSavings: auditResult.totalAnnualSavings,
+            teamSize: auditResult.teamSize,
+            useCase: auditResult.useCase,
+            recommendations: auditResult.recommendations,
+            isHighSavings: auditResult.isHighSavings,
+            isAlreadyOptimal: auditResult.isAlreadyOptimal,
+          },
+        }),
       })
         .then((r) => r.json())
-        .then((data) => setSummary(data.summary || ""))
-        .catch(() => {});
+        .then((data) => {
+          console.log("Summary API response:", data);
+          setSummary(data.summary || "");
+        })
+        .catch((err) => console.error("Summary error:", err));
 
     } catch {
       router.push("/");
@@ -88,7 +102,7 @@ useEffect(() => {
       });
       setSubmitted(true);
     } catch {
-      setSubmitted(true); // still show success to user
+      setSubmitted(true);
     } finally {
       setSubmitting(false);
     }
@@ -153,14 +167,23 @@ useEffect(() => {
           )}
         </div>
 
-{/* AI Summary */}
-        {summary && (
+        {/* AI Summary */}
+        {summary ? (
           <Card className="mb-8 border-blue-200 bg-blue-50">
             <CardContent className="pt-6">
               <p className="text-xs uppercase tracking-wide text-blue-500 font-medium mb-2">
                 AI-generated insight
               </p>
               <p className="text-blue-900 leading-relaxed">{summary}</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="mb-8 border-slate-200 bg-slate-50">
+            <CardContent className="pt-6">
+              <p className="text-xs uppercase tracking-wide text-slate-400 font-medium mb-2">
+                AI-generated insight
+              </p>
+              <p className="text-slate-400 italic text-sm">Generating personalized insight...</p>
             </CardContent>
           </Card>
         )}
@@ -192,6 +215,7 @@ useEffect(() => {
             </CardContent>
           </Card>
         )}
+
         {/* Spend summary */}
         <div className="grid grid-cols-3 gap-4 mb-10">
           <Card className="text-center">

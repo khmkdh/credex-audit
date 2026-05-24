@@ -10,21 +10,30 @@ function generateFallbackSummary(audit: AuditResult): string {
     return `Your AI tool stack looks well-optimized. You're spending $${totalMonthlySpend.toFixed(0)}/month across ${recommendations.length} tool${recommendations.length > 1 ? "s" : ""}, and our audit found no significant overspend. Keep an eye on usage as your team grows — plan mismatches tend to appear when headcount changes.`;
   }
 
-  return `Your team is spending $${totalMonthlySpend.toFixed(0)}/month on AI tools, but our audit identified $${totalMonthlySavings.toFixed(0)}/month in unnecessary spend — that's $${totalAnnualSavings.toFixed(0)} per year. The biggest opportunities are with ${toolNames || "your current plans"}. These aren't minor tweaks: switching to right-sized plans means the same capability for less, with no workflow disruption.`;
+  return `Your team is spending $${totalMonthlySpend.toFixed(0)}/month on AI tools, but our audit identified $${totalMonthlySavings.toFixed(0)}/month in unnecessary spend — that's $${totalAnnualSavings.toFixed(0)} per year. The biggest opportunities are with ${toolNames || "your current plans"}. Switching to right-sized plans means the same capability for less, with no workflow disruption. Start with the overspending tools flagged above.`;
 }
 
 export async function POST(req: NextRequest) {
+  let auditResult: AuditResult;
+
   try {
-    const { auditResult }: { auditResult: AuditResult } = await req.json();
+    const body = await req.json();
+    auditResult = body.auditResult;
+  } catch {
+    return NextResponse.json({ summary: "Unable to parse request.", source: "error" });
+  }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({
-        summary: generateFallbackSummary(auditResult),
-        source: "fallback",
-      });
-    }
+  const apiKey = process.env.GEMINI_API_KEY;
 
+  if (!apiKey) {
+    console.log("No Gemini API key found, using fallback");
+    return NextResponse.json({
+      summary: generateFallbackSummary(auditResult),
+      source: "fallback",
+    });
+  }
+
+  try {
     const prompt = `You are a financial advisor specializing in SaaS and AI tool spend optimization.
 
 A startup has completed an AI spend audit. Here are the results:
@@ -49,7 +58,11 @@ Write a personalized 80-100 word summary paragraph for this specific team. Be di
       }
     );
 
-    if (!response.ok) throw new Error("Gemini API error");
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Gemini API error:", response.status, errText);
+      throw new Error(`Gemini error: ${response.status}`);
+    }
 
     const data = await response.json();
     const summary =
@@ -58,9 +71,9 @@ Write a personalized 80-100 word summary paragraph for this specific team. Be di
 
     return NextResponse.json({ summary, source: "gemini" });
   } catch (err) {
-    console.error("Summary generation error:", err);
+    console.error("Summary generation failed:", err);
     return NextResponse.json({
-      summary: generateFallbackSummary({ ...({} as AuditResult) }),
+      summary: generateFallbackSummary(auditResult),
       source: "fallback",
     });
   }
