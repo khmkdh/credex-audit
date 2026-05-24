@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SpendSmart AI — Free AI Spend Audit Tool
 
-## Getting Started
+A free web app that helps startup founders and engineering managers audit their AI tool spend, identify overspending, and get actionable recommendations to save money. Built as a lead-generation asset for [Credex](https://credex.rocks).
 
-First, run the development server:
+**Live URL:** https://credex-audit-wges.vercel.app
+
+---
+
+## Screenshots
+
+> Add screenshots here after taking them — run the app and screenshot the form and results page.
+
+---
+
+## Quick Start
+
+### Run locally
 
 ```bash
+git clone https://github.com/khmkdh/credex-audit.git
+cd credex-audit
+npm install
+cp .env.local.example .env.local  # fill in your keys
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Description |
+|---|---|
+| `GEMINI_API_KEY` | Google Gemini API key for AI summaries |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |
+| `RESEND_API_KEY` | Resend API key for transactional email |
+| `NEXT_PUBLIC_BASE_URL` | Your deployed URL |
 
-## Learn More
+### Deploy
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Push to main — Vercel auto-deploys
+git push origin main
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Decisions
 
-## Deploy on Vercel
+1. **Next.js App Router over Pages Router** — App Router enables React Server Components and native support for async params in dynamic routes, which simplified the shareable URL implementation. Trade-off: steeper learning curve for a first Next.js project.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Hardcoded audit rules over ML/AI** — The audit engine uses deterministic rules rather than AI inference. This makes the logic auditable, debuggable, and defensible to a finance person. AI is only used for the summary paragraph where natural language adds value.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Gemini over Anthropic API** — Anthropic's console required a payment method with no free tier bypass. Gemini's free tier (1,500 requests/day) is more than sufficient for this use case and the assignment explicitly permits any LLM.
+
+4. **Supabase over a custom Postgres** — Supabase gives a managed Postgres with a REST API, auth, and RLS out of the box. For a 7-day build, this saved significant setup time. Trade-off: vendor lock-in.
+
+5. **Email gate after results, never before** — Showing value before asking for email dramatically increases conversion. Users who see their savings number are far more motivated to share their email than users who hit a gate before seeing anything.
+
+---
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router) + TypeScript
+- **Styling:** Tailwind CSS + shadcn/ui
+- **Database:** Supabase (Postgres)
+- **Email:** Resend
+- **AI:** Google Gemini 1.5 Flash
+- **Deploy:** Vercel
+- **Tests:** Jest + ts-jest
