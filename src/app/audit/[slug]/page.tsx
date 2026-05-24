@@ -2,13 +2,14 @@ import { Metadata } from "next";
 import SharedAuditClient from "./SharedAuditClient";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
+    const { slug } = await params;
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/audits/${params.slug}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/audits/${slug}`,
       { cache: "no-store" }
     );
     const data = await res.json();
@@ -33,6 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function SharedAuditPage({ params }: Props) {
-  return <SharedAuditClient slug={params.slug} />;
+export default async function SharedAuditPage({ params }: Props) {
+  const { slug } = await params;
+  return <SharedAuditClient slug={slug} />;
 }
