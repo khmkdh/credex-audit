@@ -28,8 +28,10 @@ export default function AuditPage() {
   const [role, setRole] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [summary, setSummary] = useState<string>("");
+  const [shareUrl, setShareUrl] = useState<string>("");
 
-  useEffect(() => {
+useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) {
       router.push("/");
@@ -39,6 +41,31 @@ export default function AuditPage() {
       const formState: FormState = JSON.parse(saved);
       const auditResult = runAudit(formState);
       setResult(auditResult);
+
+      // Save audit to DB and get shareable URL
+      fetch("/api/audits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formData: formState, auditResult }),
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.slug) {
+            setShareUrl(`${window.location.origin}/audit/${data.slug}`);
+          }
+        })
+        .catch(() => {});
+
+      // Generate AI summary
+      fetch("/api/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ auditResult }),
+      })
+        .then((r) => r.json())
+        .then((data) => setSummary(data.summary || ""))
+        .catch(() => {});
+
     } catch {
       router.push("/");
     }
@@ -126,6 +153,45 @@ export default function AuditPage() {
           )}
         </div>
 
+{/* AI Summary */}
+        {summary && (
+          <Card className="mb-8 border-blue-200 bg-blue-50">
+            <CardContent className="pt-6">
+              <p className="text-xs uppercase tracking-wide text-blue-500 font-medium mb-2">
+                AI-generated insight
+              </p>
+              <p className="text-blue-900 leading-relaxed">{summary}</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Share URL */}
+        {shareUrl && (
+          <Card className="mb-8">
+            <CardContent className="pt-6">
+              <p className="text-sm font-medium text-slate-700 mb-2">
+                Share this audit
+              </p>
+              <div className="flex gap-2">
+                <input
+                  readOnly
+                  value={shareUrl}
+                  className="flex-1 rounded-md border border-input px-3 py-2 text-sm bg-slate-50"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareUrl);
+                    alert("Link copied!");
+                  }}
+                >
+                  Copy
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
         {/* Spend summary */}
         <div className="grid grid-cols-3 gap-4 mb-10">
           <Card className="text-center">
