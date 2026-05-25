@@ -8,8 +8,12 @@ A free web app that helps startup founders and engineering managers audit their 
 
 ## Screenshots
 
-> Add screenshots here after taking them — run the app and screenshot the form and results page.
 
+### Spend Input Form
+![Spend Input Form](screenshots/screenshot-form.png)
+
+### Audit Results
+![Audit Results](screenshots/screenshot-results.png)
 ---
 
 ## Quick Start
