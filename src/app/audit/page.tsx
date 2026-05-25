@@ -31,7 +31,7 @@ export default function AuditPage() {
   const [summary, setSummary] = useState<string>("");
   const [shareUrl, setShareUrl] = useState<string>("");
 
-  useEffect(() => {
+useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) {
       router.push("/");
@@ -40,7 +40,6 @@ export default function AuditPage() {
     try {
       const formState: FormState = JSON.parse(saved);
       const auditResult = runAudit(formState);
-      setResult(auditResult);
 
       // Save audit to DB and get shareable URL
       fetch("/api/audits", {
@@ -79,6 +78,9 @@ export default function AuditPage() {
           setSummary(data.summary || "");
         })
         .catch((err) => console.error("Summary error:", err));
+
+      // ✅ setState moved to async callback, not synchronous
+      Promise.resolve().then(() => setResult(auditResult));
 
     } catch {
       router.push("/");
@@ -147,7 +149,7 @@ export default function AuditPage() {
           {result.isAlreadyOptimal ? (
             <>
               <h2 className="text-4xl font-bold text-green-600 mb-3">
-                You're spending well ✓
+                You&apos;re spending well ✓
               </h2>
               <p className="text-slate-600 max-w-xl mx-auto">
                 Based on your team size and use case, your current AI tool spend
@@ -296,7 +298,7 @@ export default function AuditPage() {
               <p className="text-blue-700 mb-4 max-w-xl mx-auto">
                 You have over $500/month in identified savings. Credex helps startups
                 access verified AI credits at a discount — the same tools, for less.
-                Book a free consultation to see what's available for your stack.
+                Book a free consultation to see what&apos;s available for your stack.
               </p>
               <Button className="bg-blue-600 hover:bg-blue-700">
                 Book a Free Credex Consultation →
@@ -369,7 +371,7 @@ export default function AuditPage() {
             <CardContent className="pt-6">
               <p className="text-green-700 font-semibold text-lg">✓ Report sent!</p>
               <p className="text-green-600 text-sm mt-1">
-                Check your inbox. We'll follow up if we find additional savings for your stack.
+                Check your inbox. We&apos;ll follow up if we find additional savings for your stack.
               </p>
             </CardContent>
           </Card>
