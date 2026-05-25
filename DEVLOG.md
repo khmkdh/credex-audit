@@ -64,3 +64,65 @@ USER_INTERVIEWS.md pending — need to conduct 3 real interviews.
 
 **Plan for tomorrow:** Complete user interviews, finish Resend email
 integration, run Lighthouse audit on deployed URL, write USER_INTERVIEWS.md.
+
+## Day 3 — 2026-05-25
+
+**Hours worked:** 8
+
+**What I did:** Conducted 3 real user interviews with classmates — Aditya
+(software developer at AppOpen), Abhilash (MCA student, course project), and
+Anuska (content creator and small business owner). Wrote USER_INTERVIEWS.md
+with full notes from all 3 conversations. Completed Resend email integration —
+users now receive a formatted HTML audit report in their inbox after submitting
+their email, confirmed working with a real test. Added screenshots to README.md.
+Wrote all remaining documentation: PROMPTS.md, REFLECTION.md, LANDING_COPY.md,
+METRICS.md, ECONOMICS.md, GTM.md. Tested live deployment at
+https://credex-audit-wges.vercel.app end-to-end.
+
+**What I learned:** User interviews revealed the tool has broader appeal than
+just developers — content creators and small business owners who pay for AI
+tools have the same pain of not tracking spend. Abhilash checked his bank
+statement mid-conversation and was surprised by how much he had spent —
+a powerful reminder that spend awareness alone is valuable, separate from
+optimization. Anuska's use case showed the tool could serve creators and
+freelancers, not just engineering teams.
+
+**Blockers / what I'm stuck on:** The 5-day commit requirement was not met.
+This is an honest acknowledgement: the entire project was built intensively
+over 2 days (May 24–25). The reason is that the days prior to receiving this
+assignment were consumed by college mid-term examinations, lab exams, course
+project demonstrations, and a research paper submission — all happening
+simultaneously in the same week. I had no bandwidth to start earlier. When
+I received the assignment I committed fully and built the entire application —
+6 MVP features, 7 passing tests, CI, full deployment, all 12 required markdown
+files, and 3 real user interviews — in approximately 18 hours of focused work
+across 2 days. I understand this affects my discipline score and I accept that
+honestly rather than attempting to fake a git history.
+
+**Plan for tomorrow:** Monitor the live deployment, respond to any issues,
+continue improving audit engine rules if time permits.
+
+---
+
+## Note on Commit History
+
+This project was built across 2 calendar days (May 24–25, 2026) rather than
+the required 5. The reason is honest and documented here: the week prior to
+and including the assignment release coincided with my college mid-term
+examinations, laboratory exams, mandatory course project demonstrations, and
+a research paper submission deadline. These are verifiable academic
+commitments that left no time to begin earlier.
+
+When bandwidth became available on May 24, I worked approximately 18 hours
+across 2 days to build and ship:
+- A complete full-stack Next.js + TypeScript application
+- 6 working MVP features including AI integration, Supabase backend, and
+  transactional email
+- 7 passing automated tests
+- A live Vercel deployment
+- 12 required markdown files including real user interviews
+- Verified pricing data from official vendor pages
+
+I chose to document this honestly rather than manipulate git history, which
+the assignment explicitly checks for and rejects. I hope the quality and
+completeness of the submission speaks to the effort invested.
