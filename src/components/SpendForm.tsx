@@ -22,8 +22,7 @@ export default function SpendForm() {
   const [form, setForm] = useState<FormState>(defaultForm);
   const [selectedToolIds, setSelectedToolIds] = useState<string[]>([]);
 
-  // Load from localStorage on mount
- useEffect(() => {
+  useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
@@ -36,7 +35,6 @@ export default function SpendForm() {
     }
   }, []);
 
-  // Save to localStorage on every change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
   }, [form]);
@@ -84,9 +82,7 @@ export default function SpendForm() {
     setForm((prev) => ({
       ...prev,
       tools: prev.tools.map((t) =>
-        t.toolId === toolId
-          ? { ...t, planId, monthlySpend: newSpend }
-          : t
+        t.toolId === toolId ? { ...t, planId, monthlySpend: newSpend } : t
       ),
     }));
   }
@@ -107,7 +103,7 @@ export default function SpendForm() {
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-slate-900">SpendSmart AI</h1>
-            <p className="text-xs text-slate-500">Free AI spend audit by Credex</p>
+            <p className="text-xs text-slate-600">Free AI spend audit by Credex</p>
           </div>
           <Badge variant="secondary">Free Tool</Badge>
         </div>
@@ -175,7 +171,7 @@ export default function SpendForm() {
           <h3 className="text-lg font-semibold text-slate-900 mb-2">
             Which AI tools do you pay for?
           </h3>
-          <p className="text-sm text-slate-500 mb-4">
+          <p className="text-sm text-slate-600 mb-4">
             Select all that apply. You can add spend details below.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -185,6 +181,7 @@ export default function SpendForm() {
                 <button
                   key={tool.id}
                   onClick={() => toggleTool(tool.id)}
+                  aria-pressed={selected}
                   className={`p-3 rounded-lg border-2 text-sm font-medium transition-all text-left ${
                     selected
                       ? "border-blue-500 bg-blue-50 text-blue-700"
@@ -213,7 +210,8 @@ export default function SpendForm() {
                       <h4 className="font-semibold text-slate-900">{tool.name}</h4>
                       <button
                         onClick={() => toggleTool(entry.toolId)}
-                        className="text-xs text-slate-400 hover:text-red-500"
+                        aria-label={`Remove ${tool.name}`}
+                        className="text-xs text-slate-500 hover:text-red-500"
                       >
                         Remove
                       </button>
@@ -221,9 +219,10 @@ export default function SpendForm() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       {/* Plan */}
                       <div className="space-y-2">
-                        <Label>Plan</Label>
+                        <Label htmlFor={`plan-${entry.toolId}`}>Plan</Label>
                         <select
-                          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          id={`plan-${entry.toolId}`}
+                          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
                           value={entry.planId}
                           onChange={(e) => handlePlanChange(entry.toolId, e.target.value)}
                         >
@@ -241,8 +240,9 @@ export default function SpendForm() {
                       </div>
                       {/* Seats */}
                       <div className="space-y-2">
-                        <Label>Number of seats</Label>
+                        <Label htmlFor={`seats-${entry.toolId}`}>Number of seats</Label>
                         <Input
+                          id={`seats-${entry.toolId}`}
                           type="number"
                           min={1}
                           value={entry.seats}
@@ -262,8 +262,9 @@ export default function SpendForm() {
                       </div>
                       {/* Monthly Spend */}
                       <div className="space-y-2">
-                        <Label>Actual monthly spend ($)</Label>
+                        <Label htmlFor={`spend-${entry.toolId}`}>Actual monthly spend ($)</Label>
                         <Input
+                          id={`spend-${entry.toolId}`}
                           type="number"
                           min={0}
                           value={entry.monthlySpend}
@@ -294,7 +295,7 @@ export default function SpendForm() {
           >
             Run My Free Audit →
           </Button>
-          <p className="text-xs text-slate-400 mt-3">
+          <p className="text-xs text-slate-500 mt-3">
             No login required. Results are instant.
           </p>
         </div>
