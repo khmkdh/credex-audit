@@ -1,10 +1,5 @@
 import { TOOLS, FormState, ToolEntry } from "./tools";
 
-const INR_TO_USD = 0.012;
-
-function toUSD(amount: number, currency: "USD" | "INR"): number {
-  return currency === "INR" ? amount * INR_TO_USD : amount;
-}
 
 export type ToolRecommendation = {
   toolId: string;
@@ -161,7 +156,6 @@ function evaluateTool(
 
   // --- ChatGPT ---
   if (toolId === "chatgpt") {
-    const inrSpend = currentSpend;
     if (entry.planId === "pro" && useCase === "coding") {
       return makeRec(toolId, toolName, currentPlanName, currentSpend, {
         action: "Switch to a coding-focused tool",
