@@ -23,13 +23,15 @@ export default function SpendForm() {
   const [selectedToolIds, setSelectedToolIds] = useState<string[]>([]);
 
   // Load from localStorage on mount
-  useEffect(() => {
+ useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        setForm(parsed);
-        setSelectedToolIds(parsed.tools.map((t: ToolEntry) => t.toolId));
+        Promise.resolve().then(() => {
+          setForm(parsed);
+          setSelectedToolIds(parsed.tools.map((t: ToolEntry) => t.toolId));
+        });
       } catch {}
     }
   }, []);
@@ -119,7 +121,7 @@ export default function SpendForm() {
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Enter what you pay for AI tools today. Get an instant audit showing
-            exactly where you're overspending and how much you could save.
+            exactly where you&apos;re overspending and how much you could save.
           </p>
         </div>
 
