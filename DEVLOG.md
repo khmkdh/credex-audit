@@ -62,7 +62,7 @@ Supabase and all environment variables, and push the initial codebase.
 
 **Hours worked:** 4
 
-**What I did:** Set up the entire project foundation. Initialized a Next.js 14
+**What I did:** Set up the entire project foundation. Initialized a Next.js 16
 project with TypeScript, Tailwind CSS, and ESLint. Installed all required
 dependencies including Supabase, Resend, and nanoid. Configured shadcn/ui with
 the Nova preset and added all required UI components (button, input, label,
