@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     try {
       await resend.emails.send({
         from: "SpendSmart AI <onboarding@resend.dev>",
-        to: email,
+        to: "khyatimadhubora0606@gmail.com",
         subject: "Your AI Spend Audit Report",
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
