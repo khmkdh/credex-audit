@@ -14,7 +14,6 @@ A free web app that helps startup founders and engineering managers audit their 
 
 ### Audit Results
 ![Audit Results](screenshots/screenshot-results.png)
----
 
 ## Quick Start
 
