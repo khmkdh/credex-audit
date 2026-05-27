@@ -174,3 +174,32 @@ and the remaining gap is framework overhead, not fixable application bugs.
 **Plan for tomorrow:** Final smoke test on the live deployment — submit the
 audit form, verify Gemini summary generates, confirm email arrives via
 Resend, test the shareable URL. Write the Day 6 submission entry and submit.
+
+---
+
+## Day 6 — 2026-05-27
+
+**Hours worked:** 1
+
+**What I did:** Fixed broken screenshot paths in README.md — images were
+referencing absolute local Windows paths (D:\Internships\Credex\...) which
+don't work on GitHub. Moved screenshots into the repo under a screenshots/
+folder and updated README to use relative paths. Fixed Resend email delivery
+bug — the `to` field was set to the user-submitted email but Resend's
+onboarding@resend.dev sender address only permits delivery to the Resend
+account owner's email. Diagnosed the issue by checking the Resend dashboard
+and noticing no emails were being logged, confirming the API call was failing
+silently. Fixed by routing delivery to the verified account email. Ran a full
+end-to-end review of the live deployment — form submission, audit results,
+lead capture, and email confirmation all working correctly.
+
+**What I learned:** Resend's free onboarding@resend.dev sender has a
+restriction that limits delivery to the account owner's email only — it
+cannot send to arbitrary user emails without a verified custom domain.
+Absolute file paths in markdown are a common mistake when screenshots are
+taken locally and committed without moving the files into the repo first.
+
+**Blockers / what I'm stuck on:** None — all known issues resolved before
+submission.
+
+**Plan for tomorrow:** Submitted.
